@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-destino-viaje',
+  standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './destino-viaje.html',
   styleUrl: './destino-viaje.css',
@@ -14,6 +15,7 @@ export class DestinoViaje {
   @Input() destino: DestinoViajes = new DestinoViajes('', '');
   @Input() position: number = 0;
   @Output() clicked: EventEmitter<DestinoViajes> = new EventEmitter();
+
   ir() {
     this.clicked.emit(this.destino);
     return false;
