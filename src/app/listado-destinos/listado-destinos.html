@@ -14,8 +14,15 @@
         </div>
     </div>
     <hr class="mb-5">
+      <div class="row mb-3">
+    <div class="col">
+      <button class="btn btn-warning" (click)="resetVotos()">
+         Resetear todos los votos
+      </button>
+    </div>
+  </div>
     <div class="row row-flex">
-        <div class="col-md-3" *ngFor="let destino of destinos$ | async;  let i = index">
+        <div class="col-md-3" *ngFor="let destino of all;  let i = index">
             <app-destino-viaje  [destino]="destino" 
                 [idx]="i+1"
                 [esFavorito]="destino.isSelected()"

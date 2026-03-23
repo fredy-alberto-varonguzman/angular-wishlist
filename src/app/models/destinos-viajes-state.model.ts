@@ -32,7 +32,10 @@ export const initializeDestinosViajesState = function () {
 export enum DestinosViajesActionTypes {
     NUEVO_DESTINO_VIAJE = '[Destinos Viajes] Nuevo',
     ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito',
-    ELIMINAR_DESTINO = '[Destinos Viajes] Eliminar'
+    ELIMINAR_DESTINO = '[Destinos Viajes] Eliminar',
+    VOTE_UP = '[Destinos Viajes] Vote Up',
+    VOTE_DOWN = '[Destinos Viajes] Vote Down',
+    RESET_VOTES = '[Destinos Viajes] Reset Votes'
 }
 
 export class EliminarDestinoAction implements Action {
@@ -50,7 +53,20 @@ export class ElegidoFavoritoAction implements Action {
     constructor(public destino: DestinoViajes) { }
 }
 
-export type DestinosViajesActions = NuevoDestinoViajeAction | ElegidoFavoritoAction | EliminarDestinoAction;
+export class VoteUpAction implements Action {
+    type = DestinosViajesActionTypes.VOTE_UP;
+    constructor(public destino: DestinoViajes) { }
+}
+
+export class VoteDownAction implements Action {
+    type = DestinosViajesActionTypes.VOTE_DOWN;
+    constructor(public destino: DestinoViajes) { }
+}
+
+export class ResetVoteAction implements Action {
+    type = DestinosViajesActionTypes.RESET_VOTES;
+}
+export type DestinosViajesActions = NuevoDestinoViajeAction | ElegidoFavoritoAction | EliminarDestinoAction | VoteUpAction | VoteDownAction;
 
 // Reducer 
 export function reducerDestinosViajes(
@@ -88,6 +104,29 @@ export function reducerDestinosViajes(
                 items: nuevosItems,
                 favorito: nuevoFav
             };
+        }
+
+        case DestinosViajesActionTypes.VOTE_UP: {
+            const d = Object.assign(new DestinoViajes('', ''), (action as VoteUpAction).destino);
+            d.voteUp();
+            const nuevosItems = state.items.map(item => item.nombre === d.nombre ? d : item);
+            return { ...state, items: nuevosItems }
+        }
+
+        case DestinosViajesActionTypes.VOTE_DOWN: {
+            const d = Object.assign(new DestinoViajes('', ''), (action as VoteDownAction).destino);
+            d.voteDown();
+            const nuevosItems = state.items.map(item => item.nombre === d.nombre ? d : item);
+            return { ...state, items: nuevosItems }
+        }
+        case DestinosViajesActionTypes.RESET_VOTES: {
+        // Crea nuevas instancias con votes = 0 — inmutabilidad
+        const itemsReset = state.items.map(item => {
+            const nuevo = Object.assign(new DestinoViajes('', ''), item);
+            nuevo.votes = 0;
+            return nuevo;
+        });
+        return { ...state, items: itemsReset };
         }
     }
     return state;

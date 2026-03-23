@@ -3,7 +3,7 @@ import { DestinoViajes } from '../models/destino-viaje.model';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState, ElegidoFavoritoAction } from '../models/destinos-viajes-state.model';
+import { AppState, ElegidoFavoritoAction, VoteDownAction, VoteUpAction } from '../models/destinos-viajes-state.model';
 
 @Component({
   selector: 'app-destino-viaje',
@@ -25,6 +25,16 @@ export class DestinoViaje {
     this.store.dispatch(new ElegidoFavoritoAction(this.destino));
     this.clicked.emit(this.destino);
     //this.router.navigate(['/destino']);
+    return false;
+  }
+
+  voteUp() {
+    this.store.dispatch(new VoteUpAction(this.destino));
+    return false;
+  }
+
+  voteDown() {
+    this.store.dispatch(new VoteDownAction(this.destino));
     return false;
   }
 }
