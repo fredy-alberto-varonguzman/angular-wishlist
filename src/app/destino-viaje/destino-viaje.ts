@@ -1,7 +1,9 @@
-import { Component, EventEmitter, HostBinding, input, Input, Output } from '@angular/core';
-import { DestinoViajes } from '../destino-viaje.model';
+import { Component, EventEmitter, HostBinding, inject, input, Input, Output } from '@angular/core';
+import { DestinoViajes } from '../models/destino-viaje.model';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState, ElegidoFavoritoAction } from '../models/destinos-viajes-state.model';
 
 @Component({
   selector: 'app-destino-viaje',
@@ -13,11 +15,16 @@ import { RouterLink } from '@angular/router';
 export class DestinoViaje {
   @HostBinding('attr.class') cssClass = 'col-md-4';
   @Input() destino: DestinoViajes = new DestinoViajes('', '');
-  @Input() position: number = 0;
+  @Input("idx") position: number = 0;
+  @Input() esFavorito: boolean = false;
   @Output() clicked: EventEmitter<DestinoViajes> = new EventEmitter();
 
+  private store = inject(Store<AppState>);   
+  private router = inject(Router);   
   ir() {
+    this.store.dispatch(new ElegidoFavoritoAction(this.destino));
     this.clicked.emit(this.destino);
+    //this.router.navigate(['/destino']);
     return false;
   }
 }

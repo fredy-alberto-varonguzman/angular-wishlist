@@ -8,18 +8,23 @@
                     <h3 class="mb-0">Whishlist</h3>
                 </div>
                 <div class="card-body">
-                    <app-form-destino-viaje (onFormSubmit)="agregado($event)"></app-form-destino-viaje>
+                    <app-form-destino-viaje></app-form-destino-viaje>
                 </div>
             </div>
         </div>
     </div>
     <hr class="mb-5">
     <div class="row row-flex">
-        <app-destino-viaje 
-            *ngFor="let d of DestinoApiClient.getAll(); let i = index" 
-            [destino]="d"
-            [position]="i+1"
-            (clicked)="elegido($event)"></app-destino-viaje>
+        <div class="col-md-3" *ngFor="let destino of destinos$ | async;  let i = index">
+            <app-destino-viaje  [destino]="destino" 
+                [idx]="i+1"
+                [esFavorito]="destino.isSelected()"
+                (clicked)="elegido(destino)">
+            </app-destino-viaje>
+            <button class="btn btn-danger btn-sm mt-1 w-100" (click)="eliminar(destino)">
+                Eliminar
+            </button>
+        </div>
     </div>
 
     <hr class="mb-5">

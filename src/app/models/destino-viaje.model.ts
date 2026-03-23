@@ -1,7 +1,7 @@
 
 
 export class DestinoViajes {
-    private selected!: boolean;
+    selected: boolean = false; 
     public servicios: string[] = ['pasajes', 'alojamiento', 'traslados', 'tours'];
     id = crypto.randomUUID()
     constructor(public nombre: string, public imagenUrl: string) {}   
